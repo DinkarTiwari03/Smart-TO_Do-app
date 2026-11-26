@@ -12,7 +12,7 @@ class AppConstants {
 
   // Database
   static const String databaseName = 'smart_professor_assistant.db';
-  static const int databaseSchemaVersion = 1;
+  static const int databaseSchemaVersion = 3;
 
   // Storage Keys
   static const String themePreferenceKey = 'app_theme_mode';

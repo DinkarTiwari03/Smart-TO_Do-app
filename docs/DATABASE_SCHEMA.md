@@ -4,7 +4,7 @@
 The database layer is managed by **Drift** backed by **SQLite** using `sqlite3_flutter_libs` with foreign keys enabled (`PRAGMA foreign_keys = ON`).
 
 - Database file: `smart_professor_assistant.db`
-- Current Schema Version: `2`
+- Current Schema Version: `3`
 
 ---
 
@@ -39,7 +39,21 @@ erDiagram
         DATETIME updatedAt
     }
 
+    ScheduledNotificationsTable {
+        INTEGER notificationId PK
+        TEXT taskId FK
+        TEXT reminderType
+        DATETIME scheduledAt
+        DATETIME deadlineSnapshot
+        TEXT title
+        TEXT body
+        TEXT payload
+        TEXT status
+        DATETIME createdAt
+    }
+
     CategoriesTable ||--o{ TasksTable : "categorizes (FK restrict delete)"
+    TasksTable ||--o{ ScheduledNotificationsTable : "schedules (FK cascade delete)"
 ```
 
 ---
@@ -92,7 +106,29 @@ Stores professor tasks, deadlines, priorities, reminders, and execution states.
 
 ---
 
-### 3.3 `app_metadata_table`
+### 3.3 `scheduled_notifications_table`
+Stores local notification scheduling metadata for reconciliation, duplicate prevention, and overdue spam prevention.
+
+| Column | Type | Constraints / Default | Description |
+|---|---|---|---|
+| `notification_id` | INTEGER | PRIMARY KEY | Deterministic 31-bit FNV-1a ID from `(taskId, reminderType)` |
+| `task_id` | TEXT | NOT NULL, REFERENCES `tasks_table(id)` ON DELETE CASCADE | Foreign key to Task |
+| `reminder_type` | TEXT | NOT NULL | `custom`, `before_24h`, `before_3h`, `custom_interval`, `high_priority_extra`, `at_deadline`, `overdue` |
+| `scheduled_at` | DATETIME | NOT NULL | Scheduled delivery timestamp |
+| `deadline_snapshot` | DATETIME | NULLABLE | Task deadline snapshot at scheduling time |
+| `title` | TEXT | NOT NULL | Notification title |
+| `body` | TEXT | NOT NULL | Notification body |
+| `payload` | TEXT | NOT NULL | Navigation payload (`taskId`) |
+| `status` | TEXT | NOT NULL | `scheduled`, `cancelled`, `delivered`, `failed_permission` |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Record creation timestamp |
+
+#### Indexes:
+- `idx_notifications_task_id` on `task_id`
+- `idx_notifications_status` on `status`
+
+---
+
+### 3.4 `app_metadata_table`
 Stores global diagnostics and schema lifecycle data.
 
 | Column | Type | Constraints | Description |
@@ -106,3 +142,4 @@ Stores global diagnostics and schema lifecycle data.
 ## 4. Migration History
 - **Version 1**: Initialized `app_metadata_table` and seeded `schema_initialized_at`.
 - **Version 2**: Created `categories_table`, created `tasks_table` with foreign key and indexes, seeded 7 default academic categories.
+- **Version 3**: Created `scheduled_notifications_table` with cascade foreign key to `tasks_table` and indexes for notification tracking and reconciliation.

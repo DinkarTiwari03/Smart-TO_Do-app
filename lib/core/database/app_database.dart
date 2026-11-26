@@ -3,16 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'connection/connection.dart';
 import 'tables/app_metadata_table.dart';
 import 'tables/categories_table.dart';
+import 'tables/scheduled_notifications_table.dart';
 import 'tables/tasks_table.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [AppMetadataTable, CategoriesTable, TasksTable])
+@DriftDatabase(tables: [AppMetadataTable, CategoriesTable, TasksTable, ScheduledNotificationsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   static const List<Map<String, dynamic>> defaultCategories = [
     {'id': 'cat_academic', 'name': 'Academic', 'color': '#1E3A5F', 'isDefault': true},
@@ -45,6 +46,9 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(categoriesTable);
           await m.createTable(tasksTable);
           await _seedDefaultCategories();
+        }
+        if (from < 3) {
+          await m.createTable(scheduledNotificationsTable);
         }
       },
       beforeOpen: (details) async {

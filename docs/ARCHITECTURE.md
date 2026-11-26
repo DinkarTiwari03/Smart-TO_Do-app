@@ -53,5 +53,14 @@ Each feature in `lib/features/<feature_name>/` follows the three-tier Clean Arch
 - **State Management**: `flutter_riverpod` (v2.6.1) with ProviderScope dependency injection.
 - **Routing & Navigation**: `go_router` (v14.8.1) utilizing `StatefulShellRoute.indexedStack` for seamless persistent bottom navigation across top-level destinations.
 - **Local Persistence**: `drift` (v2.28.2) + `sqlite3_flutter_libs` + `path_provider` for cross-platform ACID-compliant relational SQLite storage with reactive queries and automated migrations.
+- **Local Notifications & Timezone Engine**: `flutter_local_notifications` (v18.0.1) + `timezone` (v0.10.1) + `flutter_timezone` (v4.1.1) abstracted behind `LocalNotificationGateway` and orchestrated by `DeadlineNotificationEngine`.
 - **Networking**: `dio` (v5.11.1) equipped with custom `NetworkInterceptor` for timeout handling, authentication headers, and automatic exception translation.
 - **UI Design System**: Material 3 with an **Academic Navy & Accent Bronze** palette, consistent 8pt grid scale (`AppDimensions`), and hierarchy typography (`AppTypography`).
+
+## 4. Dashboard & Notification Architecture (Phase 3)
+- **Reactive Dashboard**: `dashboardSummaryProvider` watches `allTasksStreamProvider` and `categoriesMapProvider`, computing `DashboardSummary` (totals, pending, completed, overdue, priority breakdown, today's tasks, and 7-day upcoming deadlines) using the device's local calendar day.
+- **Automatic Deadline Notification Engine (`DeadlineNotificationEngine`)**:
+  - Hooks into `TaskRepositoryImpl` so every task creation, edit, deadline update, priority change, completion, reopening, and deletion automatically synchronizes local Android notifications.
+  - Uses deterministic 31-bit FNV-1a IDs derived from `(taskId, reminderType)` to prevent duplicate scheduling and enable exact cancellation.
+  - Persists scheduling metadata in `scheduled_notifications_table` to prevent overdue notification spam and reconcile pending alarms on startup, app resume, timezone shifts, and settings updates.
+  - Handles Android 13+ notification permissions (`POST_NOTIFICATIONS`) and Android 12+/14+ exact-alarm restrictions (`SCHEDULE_EXACT_ALARM`) with automatic fallback to `inexactAllowWhileIdle`.

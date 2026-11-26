@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../notifications/presentation/providers/notification_providers.dart';
 import '../../data/repositories/task_repository_impl.dart';
 import '../../domain/models/task.dart';
 import '../../domain/models/task_category.dart';
@@ -8,7 +9,12 @@ import '../../domain/repositories/task_repository.dart';
 
 final taskRepositoryProvider = Provider<TaskRepository>((ref) {
   final db = ref.watch(appDatabaseProvider);
-  return TaskRepositoryImpl(db);
+  final engine = ref.watch(deadlineNotificationEngineProvider);
+  return TaskRepositoryImpl(
+    db,
+    notificationEngine: engine,
+    getNotificationSettings: () => ref.read(notificationSettingsProvider),
+  );
 });
 
 // Categories stream

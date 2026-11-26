@@ -1260,6 +1260,648 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntry> {
   }
 }
 
+class $ScheduledNotificationsTableTable extends ScheduledNotificationsTable
+    with
+        TableInfo<
+          $ScheduledNotificationsTableTable,
+          ScheduledNotificationEntry
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ScheduledNotificationsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _notificationIdMeta = const VerificationMeta(
+    'notificationId',
+  );
+  @override
+  late final GeneratedColumn<int> notificationId = GeneratedColumn<int>(
+    'notification_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _taskIdMeta = const VerificationMeta('taskId');
+  @override
+  late final GeneratedColumn<String> taskId = GeneratedColumn<String>(
+    'task_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES tasks_table (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _reminderTypeMeta = const VerificationMeta(
+    'reminderType',
+  );
+  @override
+  late final GeneratedColumn<String> reminderType = GeneratedColumn<String>(
+    'reminder_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _scheduledAtMeta = const VerificationMeta(
+    'scheduledAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> scheduledAt = GeneratedColumn<DateTime>(
+    'scheduled_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deadlineSnapshotMeta = const VerificationMeta(
+    'deadlineSnapshot',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deadlineSnapshot =
+      GeneratedColumn<DateTime>(
+        'deadline_snapshot',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _payloadMeta = const VerificationMeta(
+    'payload',
+  );
+  @override
+  late final GeneratedColumn<String> payload = GeneratedColumn<String>(
+    'payload',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    notificationId,
+    taskId,
+    reminderType,
+    scheduledAt,
+    deadlineSnapshot,
+    title,
+    body,
+    payload,
+    status,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'scheduled_notifications_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ScheduledNotificationEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('notification_id')) {
+      context.handle(
+        _notificationIdMeta,
+        notificationId.isAcceptableOrUnknown(
+          data['notification_id']!,
+          _notificationIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('task_id')) {
+      context.handle(
+        _taskIdMeta,
+        taskId.isAcceptableOrUnknown(data['task_id']!, _taskIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_taskIdMeta);
+    }
+    if (data.containsKey('reminder_type')) {
+      context.handle(
+        _reminderTypeMeta,
+        reminderType.isAcceptableOrUnknown(
+          data['reminder_type']!,
+          _reminderTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_reminderTypeMeta);
+    }
+    if (data.containsKey('scheduled_at')) {
+      context.handle(
+        _scheduledAtMeta,
+        scheduledAt.isAcceptableOrUnknown(
+          data['scheduled_at']!,
+          _scheduledAtMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_scheduledAtMeta);
+    }
+    if (data.containsKey('deadline_snapshot')) {
+      context.handle(
+        _deadlineSnapshotMeta,
+        deadlineSnapshot.isAcceptableOrUnknown(
+          data['deadline_snapshot']!,
+          _deadlineSnapshotMeta,
+        ),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('payload')) {
+      context.handle(
+        _payloadMeta,
+        payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_payloadMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {notificationId};
+  @override
+  ScheduledNotificationEntry map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ScheduledNotificationEntry(
+      notificationId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}notification_id'],
+          )!,
+      taskId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}task_id'],
+          )!,
+      reminderType:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}reminder_type'],
+          )!,
+      scheduledAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}scheduled_at'],
+          )!,
+      deadlineSnapshot: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deadline_snapshot'],
+      ),
+      title:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}title'],
+          )!,
+      body:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}body'],
+          )!,
+      payload:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}payload'],
+          )!,
+      status:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}status'],
+          )!,
+      createdAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}created_at'],
+          )!,
+    );
+  }
+
+  @override
+  $ScheduledNotificationsTableTable createAlias(String alias) {
+    return $ScheduledNotificationsTableTable(attachedDatabase, alias);
+  }
+}
+
+class ScheduledNotificationEntry extends DataClass
+    implements Insertable<ScheduledNotificationEntry> {
+  final int notificationId;
+  final String taskId;
+  final String reminderType;
+  final DateTime scheduledAt;
+  final DateTime? deadlineSnapshot;
+  final String title;
+  final String body;
+  final String payload;
+  final String status;
+  final DateTime createdAt;
+  const ScheduledNotificationEntry({
+    required this.notificationId,
+    required this.taskId,
+    required this.reminderType,
+    required this.scheduledAt,
+    this.deadlineSnapshot,
+    required this.title,
+    required this.body,
+    required this.payload,
+    required this.status,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['notification_id'] = Variable<int>(notificationId);
+    map['task_id'] = Variable<String>(taskId);
+    map['reminder_type'] = Variable<String>(reminderType);
+    map['scheduled_at'] = Variable<DateTime>(scheduledAt);
+    if (!nullToAbsent || deadlineSnapshot != null) {
+      map['deadline_snapshot'] = Variable<DateTime>(deadlineSnapshot);
+    }
+    map['title'] = Variable<String>(title);
+    map['body'] = Variable<String>(body);
+    map['payload'] = Variable<String>(payload);
+    map['status'] = Variable<String>(status);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  ScheduledNotificationsTableCompanion toCompanion(bool nullToAbsent) {
+    return ScheduledNotificationsTableCompanion(
+      notificationId: Value(notificationId),
+      taskId: Value(taskId),
+      reminderType: Value(reminderType),
+      scheduledAt: Value(scheduledAt),
+      deadlineSnapshot:
+          deadlineSnapshot == null && nullToAbsent
+              ? const Value.absent()
+              : Value(deadlineSnapshot),
+      title: Value(title),
+      body: Value(body),
+      payload: Value(payload),
+      status: Value(status),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory ScheduledNotificationEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ScheduledNotificationEntry(
+      notificationId: serializer.fromJson<int>(json['notificationId']),
+      taskId: serializer.fromJson<String>(json['taskId']),
+      reminderType: serializer.fromJson<String>(json['reminderType']),
+      scheduledAt: serializer.fromJson<DateTime>(json['scheduledAt']),
+      deadlineSnapshot: serializer.fromJson<DateTime?>(
+        json['deadlineSnapshot'],
+      ),
+      title: serializer.fromJson<String>(json['title']),
+      body: serializer.fromJson<String>(json['body']),
+      payload: serializer.fromJson<String>(json['payload']),
+      status: serializer.fromJson<String>(json['status']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'notificationId': serializer.toJson<int>(notificationId),
+      'taskId': serializer.toJson<String>(taskId),
+      'reminderType': serializer.toJson<String>(reminderType),
+      'scheduledAt': serializer.toJson<DateTime>(scheduledAt),
+      'deadlineSnapshot': serializer.toJson<DateTime?>(deadlineSnapshot),
+      'title': serializer.toJson<String>(title),
+      'body': serializer.toJson<String>(body),
+      'payload': serializer.toJson<String>(payload),
+      'status': serializer.toJson<String>(status),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  ScheduledNotificationEntry copyWith({
+    int? notificationId,
+    String? taskId,
+    String? reminderType,
+    DateTime? scheduledAt,
+    Value<DateTime?> deadlineSnapshot = const Value.absent(),
+    String? title,
+    String? body,
+    String? payload,
+    String? status,
+    DateTime? createdAt,
+  }) => ScheduledNotificationEntry(
+    notificationId: notificationId ?? this.notificationId,
+    taskId: taskId ?? this.taskId,
+    reminderType: reminderType ?? this.reminderType,
+    scheduledAt: scheduledAt ?? this.scheduledAt,
+    deadlineSnapshot:
+        deadlineSnapshot.present
+            ? deadlineSnapshot.value
+            : this.deadlineSnapshot,
+    title: title ?? this.title,
+    body: body ?? this.body,
+    payload: payload ?? this.payload,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  ScheduledNotificationEntry copyWithCompanion(
+    ScheduledNotificationsTableCompanion data,
+  ) {
+    return ScheduledNotificationEntry(
+      notificationId:
+          data.notificationId.present
+              ? data.notificationId.value
+              : this.notificationId,
+      taskId: data.taskId.present ? data.taskId.value : this.taskId,
+      reminderType:
+          data.reminderType.present
+              ? data.reminderType.value
+              : this.reminderType,
+      scheduledAt:
+          data.scheduledAt.present ? data.scheduledAt.value : this.scheduledAt,
+      deadlineSnapshot:
+          data.deadlineSnapshot.present
+              ? data.deadlineSnapshot.value
+              : this.deadlineSnapshot,
+      title: data.title.present ? data.title.value : this.title,
+      body: data.body.present ? data.body.value : this.body,
+      payload: data.payload.present ? data.payload.value : this.payload,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScheduledNotificationEntry(')
+          ..write('notificationId: $notificationId, ')
+          ..write('taskId: $taskId, ')
+          ..write('reminderType: $reminderType, ')
+          ..write('scheduledAt: $scheduledAt, ')
+          ..write('deadlineSnapshot: $deadlineSnapshot, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('payload: $payload, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    notificationId,
+    taskId,
+    reminderType,
+    scheduledAt,
+    deadlineSnapshot,
+    title,
+    body,
+    payload,
+    status,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScheduledNotificationEntry &&
+          other.notificationId == this.notificationId &&
+          other.taskId == this.taskId &&
+          other.reminderType == this.reminderType &&
+          other.scheduledAt == this.scheduledAt &&
+          other.deadlineSnapshot == this.deadlineSnapshot &&
+          other.title == this.title &&
+          other.body == this.body &&
+          other.payload == this.payload &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt);
+}
+
+class ScheduledNotificationsTableCompanion
+    extends UpdateCompanion<ScheduledNotificationEntry> {
+  final Value<int> notificationId;
+  final Value<String> taskId;
+  final Value<String> reminderType;
+  final Value<DateTime> scheduledAt;
+  final Value<DateTime?> deadlineSnapshot;
+  final Value<String> title;
+  final Value<String> body;
+  final Value<String> payload;
+  final Value<String> status;
+  final Value<DateTime> createdAt;
+  const ScheduledNotificationsTableCompanion({
+    this.notificationId = const Value.absent(),
+    this.taskId = const Value.absent(),
+    this.reminderType = const Value.absent(),
+    this.scheduledAt = const Value.absent(),
+    this.deadlineSnapshot = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.payload = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  ScheduledNotificationsTableCompanion.insert({
+    this.notificationId = const Value.absent(),
+    required String taskId,
+    required String reminderType,
+    required DateTime scheduledAt,
+    this.deadlineSnapshot = const Value.absent(),
+    required String title,
+    required String body,
+    required String payload,
+    required String status,
+    this.createdAt = const Value.absent(),
+  }) : taskId = Value(taskId),
+       reminderType = Value(reminderType),
+       scheduledAt = Value(scheduledAt),
+       title = Value(title),
+       body = Value(body),
+       payload = Value(payload),
+       status = Value(status);
+  static Insertable<ScheduledNotificationEntry> custom({
+    Expression<int>? notificationId,
+    Expression<String>? taskId,
+    Expression<String>? reminderType,
+    Expression<DateTime>? scheduledAt,
+    Expression<DateTime>? deadlineSnapshot,
+    Expression<String>? title,
+    Expression<String>? body,
+    Expression<String>? payload,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (notificationId != null) 'notification_id': notificationId,
+      if (taskId != null) 'task_id': taskId,
+      if (reminderType != null) 'reminder_type': reminderType,
+      if (scheduledAt != null) 'scheduled_at': scheduledAt,
+      if (deadlineSnapshot != null) 'deadline_snapshot': deadlineSnapshot,
+      if (title != null) 'title': title,
+      if (body != null) 'body': body,
+      if (payload != null) 'payload': payload,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  ScheduledNotificationsTableCompanion copyWith({
+    Value<int>? notificationId,
+    Value<String>? taskId,
+    Value<String>? reminderType,
+    Value<DateTime>? scheduledAt,
+    Value<DateTime?>? deadlineSnapshot,
+    Value<String>? title,
+    Value<String>? body,
+    Value<String>? payload,
+    Value<String>? status,
+    Value<DateTime>? createdAt,
+  }) {
+    return ScheduledNotificationsTableCompanion(
+      notificationId: notificationId ?? this.notificationId,
+      taskId: taskId ?? this.taskId,
+      reminderType: reminderType ?? this.reminderType,
+      scheduledAt: scheduledAt ?? this.scheduledAt,
+      deadlineSnapshot: deadlineSnapshot ?? this.deadlineSnapshot,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      payload: payload ?? this.payload,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (notificationId.present) {
+      map['notification_id'] = Variable<int>(notificationId.value);
+    }
+    if (taskId.present) {
+      map['task_id'] = Variable<String>(taskId.value);
+    }
+    if (reminderType.present) {
+      map['reminder_type'] = Variable<String>(reminderType.value);
+    }
+    if (scheduledAt.present) {
+      map['scheduled_at'] = Variable<DateTime>(scheduledAt.value);
+    }
+    if (deadlineSnapshot.present) {
+      map['deadline_snapshot'] = Variable<DateTime>(deadlineSnapshot.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (payload.present) {
+      map['payload'] = Variable<String>(payload.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScheduledNotificationsTableCompanion(')
+          ..write('notificationId: $notificationId, ')
+          ..write('taskId: $taskId, ')
+          ..write('reminderType: $reminderType, ')
+          ..write('scheduledAt: $scheduledAt, ')
+          ..write('deadlineSnapshot: $deadlineSnapshot, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('payload: $payload, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1270,6 +1912,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $TasksTableTable tasksTable = $TasksTableTable(this);
+  late final $ScheduledNotificationsTableTable scheduledNotificationsTable =
+      $ScheduledNotificationsTableTable(this);
   late final Index idxTasksDeadline = Index(
     'idx_tasks_deadline',
     'CREATE INDEX idx_tasks_deadline ON tasks_table (deadline)',
@@ -1286,6 +1930,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_tasks_priority',
     'CREATE INDEX idx_tasks_priority ON tasks_table (priority)',
   );
+  late final Index idxNotificationsTaskId = Index(
+    'idx_notifications_task_id',
+    'CREATE INDEX idx_notifications_task_id ON scheduled_notifications_table (task_id)',
+  );
+  late final Index idxNotificationsStatus = Index(
+    'idx_notifications_status',
+    'CREATE INDEX idx_notifications_status ON scheduled_notifications_table (status)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1294,10 +1946,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     appMetadataTable,
     categoriesTable,
     tasksTable,
+    scheduledNotificationsTable,
     idxTasksDeadline,
     idxTasksStatus,
     idxTasksCategory,
     idxTasksPriority,
+    idxNotificationsTaskId,
+    idxNotificationsStatus,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -1307,6 +1962,24 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('tasks_table', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'tasks_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('scheduled_notifications_table', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'tasks_table',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [
+        TableUpdate('scheduled_notifications_table', kind: UpdateKind.update),
+      ],
     ),
   ]);
 }
@@ -1867,6 +2540,34 @@ final class $$TasksTableTableReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<
+    $ScheduledNotificationsTableTable,
+    List<ScheduledNotificationEntry>
+  >
+  _scheduledNotificationsTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.scheduledNotificationsTable,
+        aliasName: $_aliasNameGenerator(
+          db.tasksTable.id,
+          db.scheduledNotificationsTable.taskId,
+        ),
+      );
+
+  $$ScheduledNotificationsTableTableProcessedTableManager
+  get scheduledNotificationsTableRefs {
+    final manager = $$ScheduledNotificationsTableTableTableManager(
+      $_db,
+      $_db.scheduledNotificationsTable,
+    ).filter((f) => f.taskId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _scheduledNotificationsTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$TasksTableTableFilterComposer
@@ -1944,6 +2645,35 @@ class $$TasksTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> scheduledNotificationsTableRefs(
+    Expression<bool> Function(
+      $$ScheduledNotificationsTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$ScheduledNotificationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.scheduledNotificationsTable,
+          getReferencedColumn: (t) => t.taskId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ScheduledNotificationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.scheduledNotificationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
   }
 }
 
@@ -2087,6 +2817,35 @@ class $$TasksTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> scheduledNotificationsTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ScheduledNotificationsTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ScheduledNotificationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.scheduledNotificationsTable,
+          getReferencedColumn: (t) => t.taskId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ScheduledNotificationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.scheduledNotificationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$TasksTableTableTableManager
@@ -2102,7 +2861,10 @@ class $$TasksTableTableTableManager
           $$TasksTableTableUpdateCompanionBuilder,
           (TaskEntry, $$TasksTableTableReferences),
           TaskEntry,
-          PrefetchHooks Function({bool categoryId})
+          PrefetchHooks Function({
+            bool categoryId,
+            bool scheduledNotificationsTableRefs,
+          })
         > {
   $$TasksTableTableTableManager(_$AppDatabase db, $TasksTableTable table)
     : super(
@@ -2177,10 +2939,16 @@ class $$TasksTableTableTableManager
                         ),
                       )
                       .toList(),
-          prefetchHooksCallback: ({categoryId = false}) {
+          prefetchHooksCallback: ({
+            categoryId = false,
+            scheduledNotificationsTableRefs = false,
+          }) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (scheduledNotificationsTableRefs)
+                  db.scheduledNotificationsTable,
+              ],
               addJoins: <
                 T extends TableManagerState<
                   dynamic,
@@ -2214,7 +2982,29 @@ class $$TasksTableTableTableManager
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (scheduledNotificationsTableRefs)
+                    await $_getPrefetchedData<
+                      TaskEntry,
+                      $TasksTableTable,
+                      ScheduledNotificationEntry
+                    >(
+                      currentTable: table,
+                      referencedTable: $$TasksTableTableReferences
+                          ._scheduledNotificationsTableRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$TasksTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).scheduledNotificationsTableRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) =>
+                              referencedItems.where((e) => e.taskId == item.id),
+                      typedResults: items,
+                    ),
+                ];
               },
             );
           },
@@ -2234,7 +3024,462 @@ typedef $$TasksTableTableProcessedTableManager =
       $$TasksTableTableUpdateCompanionBuilder,
       (TaskEntry, $$TasksTableTableReferences),
       TaskEntry,
-      PrefetchHooks Function({bool categoryId})
+      PrefetchHooks Function({
+        bool categoryId,
+        bool scheduledNotificationsTableRefs,
+      })
+    >;
+typedef $$ScheduledNotificationsTableTableCreateCompanionBuilder =
+    ScheduledNotificationsTableCompanion Function({
+      Value<int> notificationId,
+      required String taskId,
+      required String reminderType,
+      required DateTime scheduledAt,
+      Value<DateTime?> deadlineSnapshot,
+      required String title,
+      required String body,
+      required String payload,
+      required String status,
+      Value<DateTime> createdAt,
+    });
+typedef $$ScheduledNotificationsTableTableUpdateCompanionBuilder =
+    ScheduledNotificationsTableCompanion Function({
+      Value<int> notificationId,
+      Value<String> taskId,
+      Value<String> reminderType,
+      Value<DateTime> scheduledAt,
+      Value<DateTime?> deadlineSnapshot,
+      Value<String> title,
+      Value<String> body,
+      Value<String> payload,
+      Value<String> status,
+      Value<DateTime> createdAt,
+    });
+
+final class $$ScheduledNotificationsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ScheduledNotificationsTableTable,
+          ScheduledNotificationEntry
+        > {
+  $$ScheduledNotificationsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $TasksTableTable _taskIdTable(_$AppDatabase db) =>
+      db.tasksTable.createAlias(
+        $_aliasNameGenerator(
+          db.scheduledNotificationsTable.taskId,
+          db.tasksTable.id,
+        ),
+      );
+
+  $$TasksTableTableProcessedTableManager get taskId {
+    final $_column = $_itemColumn<String>('task_id')!;
+
+    final manager = $$TasksTableTableTableManager(
+      $_db,
+      $_db.tasksTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_taskIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ScheduledNotificationsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ScheduledNotificationsTableTable> {
+  $$ScheduledNotificationsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reminderType => $composableBuilder(
+    column: $table.reminderType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get scheduledAt => $composableBuilder(
+    column: $table.scheduledAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deadlineSnapshot => $composableBuilder(
+    column: $table.deadlineSnapshot,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get payload => $composableBuilder(
+    column: $table.payload,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$TasksTableTableFilterComposer get taskId {
+    final $$TasksTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taskId,
+      referencedTable: $db.tasksTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TasksTableTableFilterComposer(
+            $db: $db,
+            $table: $db.tasksTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ScheduledNotificationsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ScheduledNotificationsTableTable> {
+  $$ScheduledNotificationsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reminderType => $composableBuilder(
+    column: $table.reminderType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get scheduledAt => $composableBuilder(
+    column: $table.scheduledAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deadlineSnapshot => $composableBuilder(
+    column: $table.deadlineSnapshot,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get payload => $composableBuilder(
+    column: $table.payload,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$TasksTableTableOrderingComposer get taskId {
+    final $$TasksTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taskId,
+      referencedTable: $db.tasksTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TasksTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.tasksTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ScheduledNotificationsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ScheduledNotificationsTableTable> {
+  $$ScheduledNotificationsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get notificationId => $composableBuilder(
+    column: $table.notificationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reminderType => $composableBuilder(
+    column: $table.reminderType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get scheduledAt => $composableBuilder(
+    column: $table.scheduledAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get deadlineSnapshot => $composableBuilder(
+    column: $table.deadlineSnapshot,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<String> get payload =>
+      $composableBuilder(column: $table.payload, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$TasksTableTableAnnotationComposer get taskId {
+    final $$TasksTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taskId,
+      referencedTable: $db.tasksTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TasksTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.tasksTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ScheduledNotificationsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ScheduledNotificationsTableTable,
+          ScheduledNotificationEntry,
+          $$ScheduledNotificationsTableTableFilterComposer,
+          $$ScheduledNotificationsTableTableOrderingComposer,
+          $$ScheduledNotificationsTableTableAnnotationComposer,
+          $$ScheduledNotificationsTableTableCreateCompanionBuilder,
+          $$ScheduledNotificationsTableTableUpdateCompanionBuilder,
+          (
+            ScheduledNotificationEntry,
+            $$ScheduledNotificationsTableTableReferences,
+          ),
+          ScheduledNotificationEntry,
+          PrefetchHooks Function({bool taskId})
+        > {
+  $$ScheduledNotificationsTableTableTableManager(
+    _$AppDatabase db,
+    $ScheduledNotificationsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$ScheduledNotificationsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$ScheduledNotificationsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$ScheduledNotificationsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> notificationId = const Value.absent(),
+                Value<String> taskId = const Value.absent(),
+                Value<String> reminderType = const Value.absent(),
+                Value<DateTime> scheduledAt = const Value.absent(),
+                Value<DateTime?> deadlineSnapshot = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<String> payload = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => ScheduledNotificationsTableCompanion(
+                notificationId: notificationId,
+                taskId: taskId,
+                reminderType: reminderType,
+                scheduledAt: scheduledAt,
+                deadlineSnapshot: deadlineSnapshot,
+                title: title,
+                body: body,
+                payload: payload,
+                status: status,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> notificationId = const Value.absent(),
+                required String taskId,
+                required String reminderType,
+                required DateTime scheduledAt,
+                Value<DateTime?> deadlineSnapshot = const Value.absent(),
+                required String title,
+                required String body,
+                required String payload,
+                required String status,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => ScheduledNotificationsTableCompanion.insert(
+                notificationId: notificationId,
+                taskId: taskId,
+                reminderType: reminderType,
+                scheduledAt: scheduledAt,
+                deadlineSnapshot: deadlineSnapshot,
+                title: title,
+                body: body,
+                payload: payload,
+                status: status,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$ScheduledNotificationsTableTableReferences(
+                            db,
+                            table,
+                            e,
+                          ),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({taskId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (taskId) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.taskId,
+                            referencedTable:
+                                $$ScheduledNotificationsTableTableReferences
+                                    ._taskIdTable(db),
+                            referencedColumn:
+                                $$ScheduledNotificationsTableTableReferences
+                                    ._taskIdTable(db)
+                                    .id,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ScheduledNotificationsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ScheduledNotificationsTableTable,
+      ScheduledNotificationEntry,
+      $$ScheduledNotificationsTableTableFilterComposer,
+      $$ScheduledNotificationsTableTableOrderingComposer,
+      $$ScheduledNotificationsTableTableAnnotationComposer,
+      $$ScheduledNotificationsTableTableCreateCompanionBuilder,
+      $$ScheduledNotificationsTableTableUpdateCompanionBuilder,
+      (
+        ScheduledNotificationEntry,
+        $$ScheduledNotificationsTableTableReferences,
+      ),
+      ScheduledNotificationEntry,
+      PrefetchHooks Function({bool taskId})
     >;
 
 class $AppDatabaseManager {
@@ -2246,4 +3491,10 @@ class $AppDatabaseManager {
       $$CategoriesTableTableTableManager(_db, _db.categoriesTable);
   $$TasksTableTableTableManager get tasksTable =>
       $$TasksTableTableTableManager(_db, _db.tasksTable);
+  $$ScheduledNotificationsTableTableTableManager
+  get scheduledNotificationsTable =>
+      $$ScheduledNotificationsTableTableTableManager(
+        _db,
+        _db.scheduledNotificationsTable,
+      );
 }

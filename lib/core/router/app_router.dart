@@ -8,7 +8,7 @@ import '../../features/ai_assistant/presentation/ai_assistant_screen.dart';
 import '../../features/writing_assistant/presentation/writing_assistant_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rootNav');
+final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rootNav');
 
 class AppRouteNames {
   AppRouteNames._();
@@ -22,7 +22,7 @@ class AppRouteNames {
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRouteNames.home,
     routes: [
       StatefulShellRoute.indexedStack(

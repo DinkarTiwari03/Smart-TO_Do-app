@@ -1,13 +1,33 @@
 import 'package:drift/drift.dart';
 import '../../../../core/database/app_database.dart';
+import '../../../notifications/domain/models/notification_settings.dart';
+import '../../../notifications/domain/services/deadline_notification_engine.dart';
 import '../../domain/models/task.dart';
 import '../../domain/models/task_category.dart';
 import '../../domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   final AppDatabase db;
+  final DeadlineNotificationEngine? notificationEngine;
+  final NotificationSettings Function()? getNotificationSettings;
 
-  TaskRepositoryImpl(this.db);
+  TaskRepositoryImpl(
+    this.db, {
+    this.notificationEngine,
+    this.getNotificationSettings,
+  });
+
+  Future<void> _syncNotificationsForTask(Task task) async {
+    if (notificationEngine == null) return;
+    final settings =
+        getNotificationSettings?.call() ?? const NotificationSettings();
+    await notificationEngine!.scheduleForTask(task, settings);
+  }
+
+  Future<void> _cancelNotificationsForTask(String taskId) async {
+    if (notificationEngine == null) return;
+    await notificationEngine!.cancelForTask(taskId);
+  }
 
   Task _mapTaskEntryToModel(TaskEntry entry) {
     return Task(
@@ -38,7 +58,8 @@ class TaskRepositoryImpl implements TaskRepository {
   Stream<List<Task>> watchAllTasks() {
     return (db.select(db.tasksTable)
           ..orderBy([
-            (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
+            (t) =>
+                OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
           ]))
         .watch()
         .map((entries) => entries.map(_mapTaskEntryToModel).toList());
@@ -50,7 +71,8 @@ class TaskRepositoryImpl implements TaskRepository {
           ..where((t) => t.status.isNotValue(TaskStatus.completed.toDbString()))
           ..orderBy([
             (t) => OrderingTerm(expression: t.deadline, mode: OrderingMode.asc),
-            (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
+            (t) =>
+                OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
           ]))
         .watch()
         .map((entries) => entries.map(_mapTaskEntryToModel).toList());
@@ -61,7 +83,8 @@ class TaskRepositoryImpl implements TaskRepository {
     return (db.select(db.tasksTable)
           ..where((t) => t.status.equals(TaskStatus.completed.toDbString()))
           ..orderBy([
-            (t) => OrderingTerm(expression: t.updatedAt, mode: OrderingMode.desc),
+            (t) =>
+                OrderingTerm(expression: t.updatedAt, mode: OrderingMode.desc),
           ]))
         .watch()
         .map((entries) => entries.map(_mapTaskEntryToModel).toList());
@@ -69,7 +92,9 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<Task?> getTaskById(String id) async {
-    final entry = await (db.select(db.tasksTable)..where((t) => t.id.equals(id))).getSingleOrNull();
+    final entry = await (db.select(db.tasksTable)
+          ..where((t) => t.id.equals(id)))
+        .getSingleOrNull();
     return entry != null ? _mapTaskEntryToModel(entry) : null;
   }
 
@@ -89,6 +114,7 @@ class TaskRepositoryImpl implements TaskRepository {
             updatedAt: Value(task.updatedAt),
           ),
         );
+    await _syncNotificationsForTask(task);
   }
 
   @override
@@ -105,10 +131,12 @@ class TaskRepositoryImpl implements TaskRepository {
         updatedAt: Value(DateTime.now()),
       ),
     );
+    await _syncNotificationsForTask(task);
   }
 
   @override
   Future<void> deleteTask(String id) async {
+    await _cancelNotificationsForTask(id);
     await (db.delete(db.tasksTable)..where((t) => t.id.equals(id))).go();
   }
 
@@ -120,6 +148,12 @@ class TaskRepositoryImpl implements TaskRepository {
         updatedAt: Value(DateTime.now()),
       ),
     );
+    final updated = await getTaskById(id);
+    if (updated != null) {
+      await _syncNotificationsForTask(updated);
+    } else {
+      await _cancelNotificationsForTask(id);
+    }
   }
 
   @override
@@ -130,6 +164,10 @@ class TaskRepositoryImpl implements TaskRepository {
         updatedAt: Value(DateTime.now()),
       ),
     );
+    final updated = await getTaskById(id);
+    if (updated != null) {
+      await _syncNotificationsForTask(updated);
+    }
   }
 
   @override
@@ -140,6 +178,10 @@ class TaskRepositoryImpl implements TaskRepository {
         updatedAt: Value(DateTime.now()),
       ),
     );
+    final updated = await getTaskById(id);
+    if (updated != null) {
+      await _syncNotificationsForTask(updated);
+    }
   }
 
   @override
@@ -150,6 +192,10 @@ class TaskRepositoryImpl implements TaskRepository {
         updatedAt: Value(DateTime.now()),
       ),
     );
+    final updated = await getTaskById(id);
+    if (updated != null) {
+      await _syncNotificationsForTask(updated);
+    }
   }
 
   @override
@@ -184,7 +230,9 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<TaskCategory?> getCategoryById(String id) async {
-    final entry = await (db.select(db.categoriesTable)..where((c) => c.id.equals(id))).getSingleOrNull();
+    final entry = await (db.select(db.categoriesTable)
+          ..where((c) => c.id.equals(id)))
+        .getSingleOrNull();
     return entry != null ? _mapCategoryEntryToModel(entry) : null;
   }
 
@@ -203,7 +251,9 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<void> updateCategoryDetails(TaskCategory category) async {
-    await (db.update(db.categoriesTable)..where((c) => c.id.equals(category.id))).write(
+    await (db.update(db.categoriesTable)
+          ..where((c) => c.id.equals(category.id)))
+        .write(
       CategoriesTableCompanion(
         name: Value(category.name),
         color: Value(category.color),
@@ -220,8 +270,9 @@ class TaskRepositoryImpl implements TaskRepository {
       }
 
       if (reassignToCategoryId != null) {
-        // Reassign tasks to the target category
-        await (db.update(db.tasksTable)..where((t) => t.categoryId.equals(id))).write(
+        await (db.update(db.tasksTable)
+              ..where((t) => t.categoryId.equals(id)))
+            .write(
           TasksTableCompanion(
             categoryId: Value(reassignToCategoryId),
             updatedAt: Value(DateTime.now()),
@@ -230,7 +281,8 @@ class TaskRepositoryImpl implements TaskRepository {
       } else {
         final count = await countTasksInCategory(id);
         if (count > 0) {
-          throw Exception('Category has $count active task(s). Provide a reassignment category before deletion.');
+          throw Exception(
+              'Category has $count active task(s). Provide a reassignment category before deletion.');
         }
       }
 

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/academic_card.dart';
-import '../../domain/models/task.dart';
 import '../../domain/models/task_with_category.dart';
 import 'task_ui_helpers.dart';
 
@@ -133,7 +132,7 @@ class TaskCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: categoryColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-                          border: Border.Border.all(color: categoryColor.withValues(alpha: 0.3)),
+                          border: Border.all(color: categoryColor.withValues(alpha: 0.3)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -157,7 +156,7 @@ class TaskCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: priorityColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-                          border: Border.Border.all(color: priorityColor.withValues(alpha: 0.3)),
+                          border: Border.all(color: priorityColor.withValues(alpha: 0.3)),
                         ),
                         child: Text(
                           task.priority.label,

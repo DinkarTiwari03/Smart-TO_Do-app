@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_dimensions.dart';
-import '../../../../core/theme/app_typography.dart';
-import '../../../../core/widgets/academic_button.dart';
-import '../../../../core/widgets/academic_card.dart';
-import '../../domain/models/task_category.dart';
-import '../../domain/models/task_with_category.dart';
-import '../providers/task_providers.dart';
-import '../screens/category_management_screen.dart';
-import '../screens/task_detail_screen.dart';
-import '../widgets/task_card.dart';
-import '../widgets/task_form_sheet.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_typography.dart';
+import '../domain/models/task_category.dart';
+import 'providers/task_providers.dart';
+import 'screens/category_management_screen.dart';
+import 'screens/task_detail_screen.dart';
+import 'widgets/task_card.dart';
+import 'widgets/task_form_sheet.dart';
 
 class TasksScreen extends ConsumerStatefulWidget {
   const TasksScreen({super.key});
@@ -286,10 +283,10 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
               ),
             ),
             const SizedBox(height: AppDimensions.space24),
-            AcademicButton(
-              label: 'Create Task',
-              icon: Icons.add,
+            ElevatedButton.icon(
               onPressed: () => _openCreateTaskSheet(context, categories),
+              icon: const Icon(Icons.add),
+              label: const Text('Create Task'),
             ),
           ],
         ),
